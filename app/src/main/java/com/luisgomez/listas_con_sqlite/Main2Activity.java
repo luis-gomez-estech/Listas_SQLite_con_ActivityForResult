@@ -42,7 +42,7 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             public void onClick(View arg0) {
 
-                String message = editText.getText().toString() + "\n" + pais.getText().toString();
+                String message = editText.getText().toString();
                 Intent intent = new Intent();
                 intent.putExtra("MESSAGE",message);
                 setResult(2, intent);

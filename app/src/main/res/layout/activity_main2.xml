@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:layout_margin="8dp"
-    android:background="#CDDC39"
+    android:background="@drawable/boton"
     >
 
     <TextView

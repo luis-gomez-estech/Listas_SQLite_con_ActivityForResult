@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         // SQLite
 
         btnInsertar = findViewById(R.id.insertar);
-        btnConsultar = (Button)findViewById(R.id.consultar);
+        btnConsultar = findViewById(R.id.consultar);
        // btnEliminar = (Button)findViewById(R.id.eliminar);
        // btnActualizar = (Button)findViewById(R.id.actualizar);
 
@@ -90,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Acaba SQLite
-
 
 
         // A la lista declarada le digo su id
@@ -129,6 +128,8 @@ public class MainActivity extends AppCompatActivity {
 
                 //Recuperamos los valores de los campos de texto
                 String sitioSQ = sitiosArray.toString();
+
+
                 adaptador1.notifyDataSetChanged();
                 //String nom = txtNombre.getText().toString();
 
@@ -217,14 +218,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-
-
             }
         });
-
-
-
-
 
 
         // Le decimos a que id se refiere el boton que se usa para ir al MAin2Activity

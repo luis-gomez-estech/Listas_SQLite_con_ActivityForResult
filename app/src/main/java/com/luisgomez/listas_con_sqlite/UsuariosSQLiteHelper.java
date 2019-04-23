@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class UsuariosSQLiteHelper extends SQLiteOpenHelper {
 
     //Sentencia SQL para crear la tabla de Usuarios
-    String sqlCreate = "CREATE TABLE Usuarios (codigo INTEGER, nombre TEXT)";
+    String sqlCreate = "CREATE TABLE Sitios (nombre TEXT, descripcion TEXT)";
 
     public UsuariosSQLiteHelper(Context contexto, String nombre,
                                 CursorFactory factory, int version) {
@@ -31,7 +31,7 @@ public class UsuariosSQLiteHelper extends SQLiteOpenHelper {
         //      ser más elaborado.
 
         //Se elimina la versión anterior de la tabla
-        db.execSQL("DROP TABLE IF EXISTS Usuarios");
+        db.execSQL("DROP TABLE IF EXISTS Sitios");
 
         //Se crea la nueva versión de la tabla
         db.execSQL(sqlCreate);
