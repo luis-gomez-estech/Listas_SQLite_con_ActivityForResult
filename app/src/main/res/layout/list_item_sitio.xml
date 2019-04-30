@@ -12,15 +12,34 @@
 
 
     <TextView
-        android:id="@+id/sitioAñadido"
+        android:id="@+id/nombreSitio"
         android:layout_width="match_parent"
         android:layout_height="50dp"
        />
 
     <TextView
-        android:id="@+id/pais"
+        android:id="@+id/nombreCiudad"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_below="@+id/sitioAñadido"
+        android:layout_below="@+id/nombreSitio"
         />
+
+    <TextView
+        android:id="@+id/nombrePais"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_below="@+id/nombreCiudad"
+        />
+
+    <Button
+        android:id="@+id/btnEliminarItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/boton_eliminar_item"
+        android:text="Eliminar"
+        android:textColor="#ffffff"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"
+        android:textSize="12sp" />
+
 </RelativeLayout>

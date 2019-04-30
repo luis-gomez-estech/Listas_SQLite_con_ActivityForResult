@@ -1,32 +1,28 @@
 package com.luisgomez.listas_con_sqlite;
 
-public class Sitio { //Aqui le he borrado la palabra public
+public class Sitio {
 
-    //Creo la variable del atributo del sitio que guardamos
-    private String sitio;
+        String nombreSitio, nombreCiudad, nombrePais;
 
-    //private int zip;
-    //private int rooms;
+        // Constructor
+        public Sitio(String nombre, String ciudad, String pais) {
+            this.nombreSitio = nombre;
+            this.nombreCiudad = ciudad;
+            this.nombrePais = pais;
+        }
 
-    // Creamos constructor
-    public Sitio(String sitio) {
-        this.sitio = sitio;
+        // obtengo los Getter de los campos
+        public String getNombreSitio() {
+            return nombreSitio;
+        }
+
+        public String getNombreCiudad() {
+            return nombreCiudad;
+        }
+
+        public String getNombrePais() {
+            return nombrePais;
+        }
+
     }
 
-    // Ahora los getter and setter
-    public String getSitio() {
-        return sitio;
-    }
-
-    public void setSitio(String sitio) {
-        this.sitio = sitio;
-    }
-
-    // El toString
-    @Override
-    public String toString() {
-        return "Sitio{" +
-                "sitio='" + sitio + '\'' +
-                '}';
-    }
-}

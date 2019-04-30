@@ -21,7 +21,7 @@
 
 
     <EditText
-        android:id="@+id/edit_item"
+        android:id="@+id/nombreSitio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"
@@ -36,11 +36,30 @@
         android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
+        android:text="Ciudad" />
+
+
+    <EditText
+        android:id="@+id/nombreCiudad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:text="Pais" />
 
 
     <EditText
-        android:id="@+id/pais"
+        android:id="@+id/nombrePais"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="text"

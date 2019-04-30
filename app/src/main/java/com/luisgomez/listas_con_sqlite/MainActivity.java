@@ -1,241 +1,188 @@
 package com.luisgomez.listas_con_sqlite;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
-import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-
-
-
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
-
-    // Una vez creadas las clases Sitio y Sitios replicando el ejmplo Gson
-
-    // Por un lado, en este proyecto teniamos creado aqui en el MainActivity un arrayList
-    // llamado sitios, pero como ahora he creado la class llamada sitios, pues para no confindirla,
-    // el array se va a llamar sitiosArray
-
-    //Ahora hay que hacer lo siguiente, ahora al crear esa clase llamada Sitios, ya no tenemos que crear aqui
-    // el arrayList llamado sitiosArray, por tanto desactivamos private ArrayList<String> sitiosArray;
-    // y creamos Sitios sitiosArray; como hemos hecho en el ejmlo Gson que tiene puesto Houses housesList;
-    // donde housesList es el arrayList de ese proyecto
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    // Codigo añadido para Gson y Preferencias
+    Button guardar, mostrar, eliminar, btnEliminarItem, insertarSitio;
+    ListView listaSitios;
 
-    Sitios sitiosArray; // Declaro el arrayLst que va a contener los sitios
-    String json; //Creamos String para guardar el json de la class Sitios
-    Button toJsonBtn; // Boton para guardar en el json
+    SitiosSQLiteHelper database;
 
-    // private ArrayList<String> sitiosArray; // Ahora lo desactivamos, ya noe s necesario
+    // Variable para el tamaño de los campos de la tabla de base de datos
+    public int tamanoCamposBD = 0;
 
-    private ListView milista; // declaro la lista
-
-    ArrayAdapter<Sitio> adaptador1; //  //Declaro el adaptador necesario cuando tenemos listas para actualizarla y
-    // sustituimos lo que hay entre corchetes, por la class Sitio que guarda cada sitio añadido
-
-    Button boton; // Declaramos el boton, para ir al Main2Activity
-
-
-
-    Button btnInsertar;
-    Button btnConsultar;
-    Button btnActualizar;
-    Button btnEliminar;
-
-    private TextView txtResultado;
-
-    private SQLiteDatabase db;
-
-
-    protected void onCreate(Bundle savedInstanceState) {
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+       // txtResultado = (TextView) findViewById(R.id.txtResultado);
 
-        // Creo el array referido a la class Sitios
+       // resultado=nombreCiudad.toString();
 
-        sitiosArray= new Sitios();
-
-        txtResultado = (TextView)findViewById(R.id.txtResultado);
-
-
-        // SQLite
-
-        btnInsertar = findViewById(R.id.insertar);
-        btnConsultar = findViewById(R.id.consultar);
-       // btnEliminar = (Button)findViewById(R.id.eliminar);
-       // btnActualizar = (Button)findViewById(R.id.actualizar);
-
-        //Abrimos la base de datos 'DBUsuarios' en modo escritura
-        UsuariosSQLiteHelper usdbh =
-                new UsuariosSQLiteHelper(this, "DBUsuarios", null, 1);
-
-        db = usdbh.getWritableDatabase();
+       // txtResultado.setText(resultado);
 
 
-        // Acaba SQLite
+        //guardar = (Button) findViewById(R.id.guardar);
+        //mostrar = (Button) findViewById(R.id.mostrar);
+        eliminar = (Button) findViewById(R.id.eliminar);
 
+        listaSitios = (ListView) findViewById(R.id.lista_final);
 
-        // A la lista declarada le digo su id
-        milista= findViewById(R.id.lista_final);
+        // Inicio la base de datos
+        database = new SitiosSQLiteHelper(MainActivity.this);
 
-        // Ahora al adaptador le decimos que obtenga los valores del arrayList que esta en la class Sitios
+        // Le digo a los botones que al hacer click van a hacer algo (esa funcion que van a hacer esta dentro del metodo onClick
+        //guardar.setOnClickListener(this);
+        //mostrar.setOnClickListener(this);
+        eliminar.setOnClickListener(this);
 
-        adaptador1 = new SitiosAdaptador(this,sitiosArray.getSitiosArray());
-        //adaptador1=new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,sitios);
-
-        // y actualizamos la lista mediante los valores del adaptador
-
-        milista.setAdapter(adaptador1);
-
-
-        // Boton guardar en el Json
-        toJsonBtn = findViewById(R.id.toJSON);
-
-        // Al pulsar boton toJson, se crea el json con los resultados del arrayList y ademas va a guardar el valor en preferencias
-
-        toJsonBtn.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-
-                String innerJson = sitiosArray.toJSON(); // String que recoge el arraylist para convertirlo a json
-                Log.i("gsonExample", innerJson); // Con esto creamos el json usando el String innerJson que acabamos de crear
-
-            }
-        });
-
-        // Boton para insertar en la base de datos
-
-        btnInsertar.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                //Recuperamos los valores de los campos de texto
-                String sitioSQ = sitiosArray.toString();
-
-
-                adaptador1.notifyDataSetChanged();
-                //String nom = txtNombre.getText().toString();
-
-                //Alternativa 1: método sqlExec()
-                //String sql = "INSERT INTO Usuarios (codigo,nombre) VALUES ('" + cod + "','" + nom + "') ";
-                //db.execSQL(sql);
-
-                //Alternativa 2: método insert()
-                ContentValues nuevoRegistro = new ContentValues();
-                nuevoRegistro.put("codigo", sitioSQ);
-                //nuevoRegistro.put("nombre", nom);
-                db.insert("Usuarios", null, nuevoRegistro);
-            }
-        });
-
-        /*
-        // Boton para actualizar la base de datos
-
-        btnActualizar.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                //Recuperamos los valores de los campos de texto
-                String sitioSQ = sitiosArray.toString();
-               // String nom = txtNombre.getText().toString();
-
-                //Alternativa 1: método sqlExec()
-                //String sql = "UPDATE Usuarios SET nombre='" + nom + "' WHERE codigo=" + cod;
-                //db.execSQL(sql);
-
-                //Alternativa 2: método update()
-                ContentValues valores = new ContentValues();
-               // valores.put("nombre", nom);
-                db.update("Usuarios", valores, "codigo=" + sitioSQ, null);
-            }
-        });
-
-*/
-/*
-        // Boton para eliminar el ultimo dato
-        btnEliminar.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                //Recuperamos los valores de los campos de texto
-                String sitioSQ = sitiosArray.toString();
-
-                //Alternativa 1: método sqlExec()
-                //String sql = "DELETE FROM Usuarios WHERE codigo=" + cod;
-                //db.execSQL(sql);
-
-                //Alternativa 2: método delete()
-                db.delete("Usuarios", "codigo=" + sitioSQ, null);
-            }
-        });
-
-*/
-
-        // Boton para consultar la base de datos
-
-        btnConsultar.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-
-                //Alternativa 1: método rawQuery()
-                Cursor c = db.rawQuery("SELECT codigo, nombre FROM Usuarios", null);
-
-
-
-                //Alternativa 2: método delete()
-                //String[] campos = new String[] {"codigo", "nombre"};
-                //Cursor c = db.query("Usuarios", campos, null, null, null, null, null);
-
-                //Recorremos los resultados para mostrarlos en pantalla
-                txtResultado.setText("");
-
-                if (c.moveToFirst()) {
-
-                    //Recorremos el cursor hasta que no haya más registros
-                    do {
-
-                        String sitioSQ = c.getString(0);
-                        //String nom = c.getString(1);
-
-                        txtResultado.append(" " + sitioSQ + " - "  + "\n");
-
-                    } while(c.moveToNext());
-                }
-
-
-
-            }
-        });
-
+        // Boton que aparece en cada item para poderlo eliminar por separado
+        //btnEliminarItem.setOnClickListener(this);
 
         // Le decimos a que id se refiere el boton que se usa para ir al MAin2Activity
 
-        boton = findViewById(R.id.boton_ir_añadir);
+        insertarSitio = findViewById(R.id.boton_ir_añadir);
 
         //Ahora le decimos a este boton que vaya al Main2Activity, pero con startActivityForResult para que nos devuelva un resultado de ese Main2Activity
-        boton.setOnClickListener(new View.OnClickListener() {
+        insertarSitio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                Intent intent = new Intent(MainActivity.this,Main2Activity.class);
-                startActivityForResult(intent, 2);
+                Intent intent = new Intent(MainActivity.this, Main2Activity.class);
+                startActivityForResult(intent, 3);
             }
         });
 
+        //LLama al metodo lista para mostrar la lista actualizada al abrir la app y leyendo los datos de la base de datos SQLite
+        Lista();
 
+    }
+
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+
+            /*
+            case R.id.guardar:
+
+                // Guardo el valor de los campos
+                String nombreSitio = this.nombreSitio.getText().toString();
+                String nombreCiudad = this.nombreCiudad.getText().toString();
+                String nombrePais = this.nombrePais.getText().toString();
+
+                // Validacion para comprobar que todos los campos estan rellenos (lo he metido como opcional)
+                if (TextUtils.isEmpty(nombreSitio) || TextUtils.isEmpty(nombreCiudad)
+                        || TextUtils.isEmpty(nombrePais)) {
+
+                    // Muestra mensaje para que se rellenen todos los datos
+                    Toast.makeText(MainActivity.this, "Rellene todos los campos.",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+
+                    // Insertamos datos añadidos a la base de datos
+                    database.insertData(new Sitio(nombreSitio, nombreCiudad,
+                            nombrePais));
+
+                    // Muestro mensaje para verificar que se ha añadido el sitio correctamente
+                    Toast.makeText(MainActivity.this, "Sitio guardado correctamente.",
+                            Toast.LENGTH_SHORT).show();
+
+
+                    Lista(); // llamamos al metodo Lista el cual va a mostrar la lista con los valores que resolvemos en ella
+                    // Asi cuando pulsamos el boton Guardar, ademas de guardar los datos en la base de datos, nos va a mostrar la lista
+
+                }
+
+                break;
+
+            case R.id.mostrar:
+
+                // Para poner losdatos almacenados de la base de datos en la lista
+                List<Sitio> list = database.getAllData();
+
+                // Arraylist que va a guardar los sitios
+                ArrayList<Sitio> SitiosArrayList = new ArrayList<Sitio>();
+
+                // obteniendo el tamaño de la lista y lo guarda en tamanoCamposBD
+                tamanoCamposBD = list.size();
+
+                // Validacion para Comprobar si hay datos en la base de datos (Si pulsamos el boton Mostrar y no hay datos en la tabla, entonces
+                // un Toasts nos va a alertar con el mensaje No hay datos en la tabla
+                if (tamanoCamposBD == 0) {
+
+                    // Si no hay datos , muestro mensaje
+                    Toast.makeText(MainActivity.this, "No hay datos en la tabla.",
+                            Toast.LENGTH_SHORT).show();
+
+
+                } else {
+
+                    // Bucle que recorre la base de datos
+                    for (Sitio data : list) {
+
+                        // El bucle va  a recoger los atributos de cada sitio (objeto) de la base de datos
+                        String nombreGuardado = data.getNombreSitio();
+                        String emailGuardado = data.getNombreCiudad();
+                        String direccionGuardada = data.getNombrePais();
+
+                        // Añado los datos al arraylist
+                        SitiosArrayList.add(new Sitio(nombreGuardado, emailGuardado,
+                                direccionGuardada));
+
+                    }
+
+                    // Adaptador actualiza el arraylist
+                    SitiosAdapter adapter = new SitiosAdapter(MainActivity.this,
+                            SitiosArrayList);
+
+                    // Adaptador actualiza la lista
+                    listaSitios.setAdapter(adapter);
+
+                    // Notifying adapter
+                    adapter.notifyDataSetChanged();
+
+                    // por ultimo, mostramos la lista (listview)
+                    listaSitios.setVisibility(View.VISIBLE);
+                }
+
+                break;
+
+                */
+
+            case R.id.eliminar:
+
+
+
+                    // Pero si, si existen datos, entonces se borran los datos y se oculta la vista de lista
+                    Toast.makeText(MainActivity.this, "Datos borrados correctamente.",
+                            Toast.LENGTH_SHORT).show();
+                    database.deleteTable();
+                    listaSitios.setVisibility(View.GONE);
+
+                break;
+
+
+        }
 
     }
 
@@ -244,29 +191,67 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == 2) {
-            String message = data.getStringExtra("MESSAGE"); // recibimos el valor del EditText del Main2Activity
+        if (requestCode == 3) {
 
-            // Ahora aqui teniamos, sitiosArray.add(message); , osea, para añadir al arrayList el sitio introducido en el Main2Activity
-            //por tanto ahora lo vamos añadir a la class Sitio, que es la que guarda cada objeto y sus atributos,
-            // para pasarlo despues a la class Sitios, donde guardamos el json de objetos, es asi???
+            // recibimos los valores de texto de los EditText del Main2Activity
+           final String nombreSitioFinal = data.getStringExtra("Tarea_nombreSitio");
+           final String nombreCiudadFinal = data.getStringExtra("Tarea_nombreCiudad");
+           final String nombrePaisFinal = data.getStringExtra("Tarea_nombrePais");
 
-            //sitiosArray.add(message); // Esto ya no nos ghace falta, ahora tenemos que añadir string recibido a la clase Sitio y se hace de esta forma,
-            // muy similar pero diferente a la anterior (san google !!!)
+            // Guardo el valor de los campos
+            String nombreSitio = nombreSitioFinal;
+            String nombreCiudad = nombreCiudadFinal;
+            String nombrePais = nombrePaisFinal;
 
-            sitiosArray.addSitio(new Sitio(message));
+            //Insertamos en la base de datos, los datos recibidos desde el MainActivity2
+            database.insertData(new Sitio(nombreSitio, nombreCiudad, nombrePais));
 
+            //LLama al metodo lista para mostrar la lista actualizada al abrir la app y leyendo los datos de la base de datos SQLite
+            Lista();
 
-            adaptador1.notifyDataSetChanged(); // Actualizamos la lista
 
         }
 
     }
 
+    public void Lista() {
 
+        // Lista que va a mostrar los datos almacenados en la base de datos
+        List<Sitio> list = database.getAllData();
 
+        // Arraylist que va a guardar los sitios
+        ArrayList<Sitio> SitiosArrayList = new ArrayList<Sitio>();
 
+        // obteniendo el tamaño de la lista y lo guarda en tamanoCamposBD
+        tamanoCamposBD = list.size();
 
+        // Bucle que recorre la base de datos. He puesto data2 pq ya tenia un data al principio del activityOfResult para recibir los datos del Main2Activity
+        for (Sitio data2 : list) {
+
+            // El bucle va  a recoger los atributos de cada sitio (objeto) de la base de datos
+            String nombreSitioGuardado = data2.getNombreSitio();
+            String nombreCiudadGuardada = data2.getNombreCiudad();
+            String nombrePaisGuardado = data2.getNombrePais();
+
+            // Añado los datos al arraylist
+            SitiosArrayList.add(new Sitio(nombreSitioGuardado, nombreCiudadGuardada,
+                    nombrePaisGuardado));
+
+        }
+
+        // Adaptador actualiza el arraylist
+        SitiosAdapter adapter = new SitiosAdapter(MainActivity.this,
+                SitiosArrayList);
+
+        // Adaptador actualiza la lista
+        listaSitios.setAdapter(adapter);
+
+        // Notifying adapter
+        adapter.notifyDataSetChanged();
+
+        // por ultimo, mostramos la lista (listview)
+        listaSitios.setVisibility(View.VISIBLE);
+    }
 
 }
 

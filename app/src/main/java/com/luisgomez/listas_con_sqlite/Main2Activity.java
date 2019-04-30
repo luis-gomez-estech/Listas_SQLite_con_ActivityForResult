@@ -19,9 +19,11 @@ import java.util.ArrayList;
 public class Main2Activity extends AppCompatActivity {
 
 
-    EditText editText; // declaro EditText para poder escribir el sitio
+    EditText nombreSitio; // declaro EditText para poder escribir el sitio
 
-    EditText pais; // declaro EditText para poder escribir el pais
+    EditText nombreCiudad; // declaro EditText para poder escribir el sitio
+
+    EditText nombrePais; // declaro EditText para poder escribir el pais
 
     Button boton_ver_sitios; // Declaro el boton para ir al MainActivity y ver sitios
 
@@ -30,8 +32,9 @@ public class Main2Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main2);
 
-        editText = findViewById(R.id.edit_item);
-        pais = findViewById(R.id.pais);
+        nombreSitio = findViewById(R.id.nombreSitio);
+        nombreCiudad = findViewById(R.id.nombreCiudad);
+        nombrePais = findViewById(R.id.nombrePais);
 
         boton_ver_sitios = findViewById(R.id.boton_ver_sitios);    // Le decimos a que id se refiere el boton1, en este caso es el boton
         // con id boton_ir_añadir que se usa para ir al MAinActivity y ver la lista
@@ -42,10 +45,14 @@ public class Main2Activity extends AppCompatActivity {
             @Override
             public void onClick(View arg0) {
 
-                String message = editText.getText().toString();
+                String nombreSitioFinal = nombreSitio.getText().toString();
+                String nombreCiudadFinal = nombreCiudad.getText().toString();
+                String nombrePaisFinal = nombrePais.getText().toString();
                 Intent intent = new Intent();
-                intent.putExtra("MESSAGE",message);
-                setResult(2, intent);
+                intent.putExtra("Tarea_nombreSitio",nombreSitioFinal);
+                intent.putExtra("Tarea_nombreCiudad",nombreCiudadFinal);
+                intent.putExtra("Tarea_nombrePais",nombrePaisFinal);
+                setResult(3, intent);
                 finish();
             }
 
