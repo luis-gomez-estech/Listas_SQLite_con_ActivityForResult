@@ -52,19 +52,33 @@ public class SitiosAdapter extends ArrayAdapter<Sitio> {
 
             view.setTag(holder);
 
-            //Button btnDelete = view.findViewById(R.id.btnEliminarItem);
-/*
-            btnDelete.setOnClickListener(new View.OnClickListener() {
+            //Boton que aparece en cada item de la lista, para eliminar dicho item de la lista al pulsarlo
+
+            Button btnEliminarItem = view.findViewById(R.id.btnEliminarItem);
+
+            btnEliminarItem.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     SitiosSQLiteHelper db = new SitiosSQLiteHelper(v.getContext());
 
-                    remove(getItem(pos));
+                    // arrayList.remove(pos);
+
+                    arrayList.remove(pos);
+
+                    // myList.clear();
+
+                    //arrayList.addAll(data);
+
+                    //db.deleteData(pos);
+                    //db.clear(pos);
+
                     notifyDataSetChanged();
+
 
                 }
             });
-*/
+
 
         } else {
             holder = (ViewHolder) view.getTag();
