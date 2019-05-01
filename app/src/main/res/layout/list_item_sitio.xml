@@ -31,15 +31,6 @@
         android:layout_below="@+id/nombreCiudad"
         />
 
-    <Button
-        android:id="@+id/btnEliminarItem"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/boton_eliminar_item"
-        android:text="Eliminar"
-        android:textColor="#ffffff"
-        android:layout_alignParentRight="true"
-        android:layout_margin="10dp"
-        android:textSize="12sp" />
+    
 
 </RelativeLayout>
